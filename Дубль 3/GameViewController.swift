@@ -11,6 +11,32 @@ import SceneKit
 
 class GameViewController: UIViewController {
 
+    // MARK: - Methods
+    
+    var ship: SCNNode!
+    
+    func addShip() {
+        // retrieve ship to the scene
+        let scnView = self.view as! SCNView
+        // add ship to the scene
+        scnView.scene?.rootNode.addChildNode(ship)
+    }
+    
+    func getShip() -> SCNNode {
+        // get scene
+        let scene = SCNScene(named: "art.scnassets/ship.scn")!
+        let ship = scene.rootNode.childNode(withName: "ship", recursively: true)!.clone()
+        return ship
+    }
+    
+    func removeShip()  {
+        let scnView = self.view as! SCNView
+        // remove ship
+        scnView.scene?.rootNode.childNode(withName: "ship", recursively: true)?.removeFromParentNode()
+        
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -40,10 +66,10 @@ class GameViewController: UIViewController {
         scene.rootNode.addChildNode(ambientLightNode)
         
         // retrieve the ship node
-        let ship = scene.rootNode.childNode(withName: "ship", recursively: true)!
+        //let ship = scene.rootNode.childNode(withName: "ship", recursively: true)!
         
         // animate the 3d object
-        ship.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: 2, z: 0, duration: 1)))
+        //ship.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: 2, z: 0, duration: 3)))
         
         // retrieve the SCNView
         let scnView = self.view as! SCNView
@@ -63,6 +89,14 @@ class GameViewController: UIViewController {
         // add a tap gesture recognizer
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
         scnView.addGestureRecognizer(tapGesture)
+        
+        removeShip()
+        
+        // get ship
+        ship = getShip()
+        
+        // add ship
+        addShip()
     }
     
     @objc
